@@ -13,6 +13,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
             'role' => 'required|in:data_entry,user_kementerian,manager',
@@ -20,6 +21,7 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role ?? 'data_entry',
@@ -31,11 +33,11 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('username', $request->username)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
@@ -45,7 +47,7 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token', [$user->role])->plainTextToken;
 
-        return response()->json(['token' => $token, 'user' => $user, 'message'=> 'Login Berhasil'], 200);
+        return response()->json(['token' => $token, 'user' => $user->refresh(), 'message'=> 'Login Berhasil'], 200);
     }
 
     public function logout(Request $request)

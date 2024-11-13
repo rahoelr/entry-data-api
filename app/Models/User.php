@@ -13,16 +13,22 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $keyType = 'string';
+    public $incrementing = false;
+
     protected static function boot()
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->id = (string) Str::uuid();
+            if (empty($model->id)) {
+                $model->id = (string) Str::uuid();
+            }
         });
     }
 
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'role',

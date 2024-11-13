@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomizationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -13,6 +14,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/manager/dashboard', function () {
             return response()->json(['message' => 'Welcome Manager']);
         });
+        Route::get('/customization', [CustomizationController::class, 'index']);
+        Route::post('/customization', [CustomizationController::class, 'update']);
     });
 
     Route::middleware('role:data_entry')->group(function () {
