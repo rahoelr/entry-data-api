@@ -15,17 +15,17 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
-            'role' => 'in:user,admin',
+            'role' => 'required|in:data_entry,user_kementerian,manager',
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role ?? 'user',
+            'role' => $request->role ?? 'data_entry',
         ]);
 
-        return response()->json(['message' => 'User registered successfully'], 201);
+        return response()->json(['message' => 'User berhasil dibuat'], 201);
     }
 
     public function login(Request $request)
@@ -45,14 +45,14 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token', [$user->role])->plainTextToken;
 
-        return response()->json(['token' => $token, 'user' => $user], 200);
+        return response()->json(['token' => $token, 'user' => $user, 'message'=> 'Login Berhasil'], 200);
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return response()->json(['message' => 'user berhasil logout']);
     }
 }
 
