@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomizationController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -16,6 +17,10 @@ Route::middleware('auth:sanctum')->group(function () {
         });
         Route::get('/customization', [CustomizationController::class, 'index']);
         Route::post('/customization', [CustomizationController::class, 'update']);
+        Route::get('/users', [UserManagementController::class, 'index']);
+        Route::post('/users', [UserManagementController::class, 'store']);
+        Route::put('/users/{uuid}', [UserManagementController::class, 'update']);
+        Route::delete('/users/{uuid}', [UserManagementController::class, 'destroy']);
     });
 
     Route::middleware('role:data_entry')->group(function () {
