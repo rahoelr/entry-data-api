@@ -1,29 +1,25 @@
 {
     "version": 2,
-    "framework": null,
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.7.0"
+            "runtime": "vercel-php@0.6.0"
         }
     },
     "routes": [
         {
-            "src": "/build/(.*)",
-            "dest": "/public/build/"
+            "src": "/img/(.*)",
+            "dest": "/public/img/"
         },
         {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
     ],
-    "buildCommand": "yum install -y compat-openssl10 && vite build",
-    "outputDirectory": "public",
-    "public": true,
     "env": {
         "APP_ENV": "production",
-        "APP_DEBUG": "false",
-        "APP_URL": "https://yourproductionurl.com",
-        "APP_KEY": "base64:TGaVaXwhWgjn9akhE4SCSIjGG/cQqvICUQ+PgLA3Bs0=",
+        "APP_DEBUG": "true",
+        "APP_URL": "https://example-atomik.vercel.app/",
+        "APP_KEY": "base64:vXM45UmgQ59ppEv7L77LK3ZysJhaSvCtZ+D6jGgD+GM=",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -39,5 +35,6 @@
         "DB_DATABASE": "dbentrydata_purerubbed",
         "DB_USERNAME": "dbentrydata_purerubbed",
         "DB_PASSWORD": "7a0928be2ea0b0699c9271dde8bf570a717c53b7"
-    }
+    },
+    "outputDirectory": "public"
 }
