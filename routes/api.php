@@ -15,12 +15,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/manager/dashboard', function () {
             return response()->json(['message' => 'Welcome Manager']);
         });
+        //kustomisasi
         Route::get('/customization', [CustomizationController::class, 'index']);
         Route::post('/customization', [CustomizationController::class, 'update']);
+
+        //user management
         Route::get('/users', [UserManagementController::class, 'index']);
         Route::post('/users', [UserManagementController::class, 'store']);
-        Route::put('/users/{uuid}', [UserManagementController::class, 'update']);
-        Route::delete('/users/{uuid}', [UserManagementController::class, 'destroy']);
+        Route::patch('/users/{id}', [UserManagementController::class, 'update']);
+        Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
     });
 
     Route::middleware('role:data_entry')->group(function () {

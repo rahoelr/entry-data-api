@@ -40,8 +40,8 @@ class UserManagementController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Cari user berdasarkan UUID
-        $user = User::where('id', $id)->first();
+        // Find user by ID
+        $user = User::find($id);
 
         if (!$user) {
             return response()->json(['message' => 'User tidak ditemukan'], 404);
@@ -64,15 +64,20 @@ class UserManagementController extends Controller
             'role' => 'nullable|in:data_entry,user_kementerian,manager',
         ]);
 
-        $user->update([
+        $user->update(array_filter([
             'name' => $request->name,
             'username' => $request->username,
             'email' => $request->email,
-            'password' => $request->filled('password') ? Hash::make($request->password) : $user->password,
+            'password' => $request->filled('password') ? Hash::make($request->password) : null,
             'role' => $request->role,
-        ]);
+        ]));
 
-        return response()->json(['message' => 'Akun berhasil diubah', 'user' => $user], 200);
+        return response()->json(['message' => 'Akun berhasil diubah', 'user' => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'username' => $user->username,
+            'role' => $user->role]
+        ], 200);
     }
 
     public function destroy($id)
