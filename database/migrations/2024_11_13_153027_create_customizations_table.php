@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('customizations', function (Blueprint $table) {
             $table->id();
-            $table->string('logo')->nullable();         // Path untuk logo
-            $table->string('favicon')->nullable();      // Path untuk favicon
-            $table->string('primary_color')->default('#FFFFFF');  // Warna utama
-            $table->string('secondary_color')->default('#000000'); // Warna kedua
-            $table->string('third_color')->default('#CCCCCC');    // Warna ketiga
+            $table->string('logo')->nullable();
+            $table->string('favicon')->nullable();
+            $table->string('primary_color')->default('#FFFFFF');
+            $table->string('secondary_color')->default('#000000');
+            $table->string('third_color')->default('#CCCCCC');
             $table->timestamps();
         });
     }

@@ -16,8 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json(['message' => 'Welcome Manager']);
         });
         //kustomisasi
-        Route::get('/customization', [CustomizationController::class, 'index']);
-        Route::post('/customization', [CustomizationController::class, 'update']);
+        Route::apiResource('/customization',CustomizationController::class);
 
         //user management
         Route::get('/users', [UserManagementController::class, 'index']);
