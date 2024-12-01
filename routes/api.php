@@ -5,7 +5,6 @@ use App\Http\Controllers\CustomizationController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -19,10 +18,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('/customization',CustomizationController::class);
 
         //user management
-        Route::get('/users', [UserManagementController::class, 'index']);
-        Route::post('/users', [UserManagementController::class, 'store']);
-        Route::patch('/users/{id}', [UserManagementController::class, 'update']);
-        Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
+        Route::apiResource('/users',UserManagementController::class);
+
     });
 
     Route::middleware('role:data_entry')->group(function () {
