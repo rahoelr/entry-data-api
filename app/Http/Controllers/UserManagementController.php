@@ -50,10 +50,21 @@ class UserManagementController extends Controller
                 'Akun berhasil dibuat',
                 201
             );
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return ApiResponse::error(
+                'Gagal membuat akun: Data sudah terdaftar.',
+                422,
+                $e->errors()
+            );
         } catch (\Exception $e) {
-            return ApiResponse::error('Gagal membuat akun', 500, ['exception' => $e->getMessage()]);
+            return ApiResponse::error(
+                'Gagal membuat akun. Terjadi kesalahan sistem.',
+                500,
+                ['exception' => $e->getMessage()]
+            );
         }
     }
+
 
     public function update(Request $request, $id)
     {
