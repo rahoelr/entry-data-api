@@ -14,16 +14,31 @@ class UserManagementController extends Controller
     public function index()
     {
         try {
-            $users = User::all();
+            $users = User::paginate(10);
 
             return ApiResponse::success(
-                UserManagementResource::collection($users),
+                [
+                    'data' => UserManagementResource::collection($users->items()),
+                    'pagination' => [
+                        'current_page' => $users->currentPage(),
+                        'last_page' => $users->lastPage(),
+                        'per_page' => $users->perPage(),
+                        'total' => $users->total(),
+                    ],
+                ],
                 'Daftar pengguna berhasil diambil'
             );
         } catch (\Exception $e) {
-            return ApiResponse::error('Gagal mengambil daftar pengguna', 500, ['exception' => $e->getMessage()]);
+            Log::error('Error fetching user list: ' . $e->getMessage());
+
+            return ApiResponse::error(
+                'Gagal mengambil daftar pengguna',
+                500,
+                ['exception' => $e->getMessage()]
+            );
         }
     }
+
 
     public function store(Request $request)
     {
