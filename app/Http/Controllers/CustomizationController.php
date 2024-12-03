@@ -34,9 +34,10 @@ class CustomizationController extends Controller
         $request->validate([
             'logo' => 'nullable|mimes:jpeg,bmp,png,jpg|max:2048',
             'favicon' => 'nullable|mimes:jpeg,bmp,png,ico|max:1024',
-            'primary_color' => 'nullable|string|max:7',
-            'secondary_color' => 'nullable|string|max:7',
-            'third_color' => 'nullable|string|max:7',
+            'primary' => 'nullable|string|max:7',
+            'secondary' => 'nullable|string|max:7',
+            'tersier' => 'nullable|string|max:7',
+            'active_color' => 'nullable|string|in:primary,secondary,tersier',
         ]);
 
         $customization = Customization::firstOrNew([]);
@@ -53,9 +54,11 @@ class CustomizationController extends Controller
             $customization->favicon = base64_encode($faviconContent);
         }
 
-        $customization->primary_color = $request->input('primary_color', '#FFFFFF');
-        $customization->secondary_color = $request->input('secondary_color', '#000000');
-        $customization->third_color = $request->input('third_color', '#CCCCCC');
+        $customization->primary = $request->input('primary', '#605BFF');
+        $customization->secondary = $request->input('secondary', '#0086C9');
+        $customization->tersier = $request->input('tersier', '#0B1437');
+
+        $customization->active_color = $request->input('active_color', 'primary');
 
         $customization->save();
 
@@ -65,6 +68,29 @@ class CustomizationController extends Controller
             'data' => new CustomizationResource($customization),
         ]);
     }
+
+    public function show(): JsonResponse
+    {
+        $customization = Customization::first();
+
+        if (!$customization) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Customization not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'success get active color.',
+            'data' => [
+                'active_color' => $customization->active_color,
+            ],
+        ]);
+    }
+
+
+
 
 //    public function update(Request $request): JsonResponse
 //    {

@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
         });
         //kustomisasi
         Route::apiResource('/customization',CustomizationController::class);
+        Route::get('customization/active-color', [CustomizationController::class, 'show']);
 
         //user management
         Route::apiResource('/users',UserManagementController::class);

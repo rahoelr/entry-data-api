@@ -13,9 +13,10 @@ class CustomizationResource extends JsonResource
             'id' => $this->id,
             'logo' => $this->logo ? 'data:image/png;base64,' . $this->logo : null,
             'favicon' => $this->favicon ? 'data:image/x-icon;base64,' . $this->favicon : null,
-            'primary_color' => $this->primary_color,
-            'secondary_color' => $this->secondary_color,
-            'third_color' => $this->third_color,
+            'active_color' => $this->active_color,
+            'primary_color' => $this->primary,
+            'secondary_color' => $this->secondary,
+            'tersier_color' => $this->tersier,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
