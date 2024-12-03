@@ -21,8 +21,16 @@ class AuthController extends Controller
 
             $user = User::where('username', $request->username)->first();
 
+            if (!$user) {
+                return ApiResponse::error('The provided username does not exist.', 401);
+            }
+
+            if ($user->status !== 'active') {
+                return ApiResponse::error('Your account is inactive. Please contact admin.', 403);
+            }
+
             if (!$user || !Hash::check($request->password, $user->password)) {
-                return ApiResponse::error('The provided credentials are incorrect.', 401);
+                return ApiResponse::error('Username or password is incorrect.', 401);
             }
 
             $token = $user->createToken('auth_token', [$user->role])->plainTextToken;
