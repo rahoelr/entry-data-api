@@ -11,10 +11,13 @@ use Illuminate\Validation\Rule;
 
 class UserManagementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $users = User::paginate(10);
+            $username = $request->query('username');
+            $users = User::when($username, function ($query, $username) {
+                $query->where('username', 'like', "%$username%");
+            })->paginate(10);
 
             return ApiResponse::success(
                 [
@@ -137,4 +140,5 @@ class UserManagementController extends Controller
             return ApiResponse::error('Gagal menghapus akun', 500, ['exception' => $e->getMessage()]);
         }
     }
+
 }
