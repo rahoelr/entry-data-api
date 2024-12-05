@@ -36,4 +36,4 @@ RUN chmod -R 775 storage bootstrap/cache
 EXPOSE 9000
 
 # Perintah default untuk menjalankan aplikasi
-CMD service nginx start && php-fpm
+CMD php-fpm
