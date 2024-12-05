@@ -33,7 +33,7 @@ RUN cp .env.example .env && \
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port untuk PHP-FPM
-EXPOSE 80
+EXPOSE 9000
 
 # Perintah default untuk menjalankan aplikasi
 CMD service nginx start && php-fpm
