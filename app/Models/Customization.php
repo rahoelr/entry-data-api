@@ -14,6 +14,20 @@ class Customization extends Model
         'favicon',
         'primary_color',
         'secondary_color',
-        'third_color',
+        'tersier_color',
+        'active_color',
     ];
+
+    public function getActiveColorValueAttribute()
+    {
+        if ($this->active_color == 'primary') {
+            return $this->primary;
+        } elseif ($this->active_color == 'secondary') {
+            return $this->secondary;
+        } elseif ($this->active_color == 'tersier') {
+            return $this->tersier;
+        }
+
+        return $this->primary;
+    }
 }

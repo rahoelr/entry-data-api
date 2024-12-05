@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customizations', function (Blueprint $table) {
+        Schema::create('sync_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('logo')->nullable();
-            $table->string('favicon')->nullable();
-            $table->string('primary_color')->default('#605BFF');
-            $table->string('secondary_color')->default('#0086C9');
-            $table->string('third_color')->default('#0B1437');
+            $table->string('endpoint_url');
+            $table->string('api_key');
+            $table->enum('status', ['success', 'failure', 'in_progress'])->default('in_progress');
+            $table->timestamp('sync_time');
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customizations');
+        Schema::dropIfExists('sync_logs');
     }
 };

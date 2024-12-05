@@ -4,8 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomizationController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SyncController;
 
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -16,14 +16,17 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json(['message' => 'Welcome Manager']);
         });
         //kustomisasi
-        Route::get('/customization', [CustomizationController::class, 'index']);
-        Route::post('/customization', [CustomizationController::class, 'update']);
+        Route::apiResource('/customization',CustomizationController::class);
+        Route::get('customization/active-color', [CustomizationController::class, 'show']);
+
+        //sinkronisasi
+        Route::post('/sync/save', [SyncController::class, 'saveEndpoint']);
+        Route::post('/sync/now', [SyncController::class, 'syncNow']);
+        Route::get('/sync/logs', [SyncController::class, 'getLogs']);
 
         //user management
-        Route::get('/users', [UserManagementController::class, 'index']);
-        Route::post('/users', [UserManagementController::class, 'store']);
-        Route::patch('/users/{id}', [UserManagementController::class, 'update']);
-        Route::delete('/users/{id}', [UserManagementController::class, 'destroy']);
+        Route::apiResource('/users',UserManagementController::class);
+
     });
 
     Route::middleware('role:data_entry')->group(function () {
