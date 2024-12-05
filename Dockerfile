@@ -29,7 +29,7 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port untuk PHP-FPM
-EXPOSE 8000
+EXPOSE 9000
 
 # Perintah default untuk menjalankan aplikasi
 CMD ["php-fpm"]
