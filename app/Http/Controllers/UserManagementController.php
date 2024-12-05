@@ -47,9 +47,9 @@ class UserManagementController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255',
+                'name' => 'nullable|string|max:255',
                 'username' => 'required|string|unique:users',
-                'email' => 'required|string|email|unique:users',
+                'email' => 'nullable|string|email|unique:users',
                 'password' => 'required|string|min:8',
                 'role' => 'required|in:data_entry,user_kementerian,manager',
             ]);
