@@ -19,16 +19,6 @@ class EntryuserController extends Controller
     {
         try {
             // // Get the desired number of items per page from the query parameter
-            // $perPage = $request->query('per_page', 10); // Default to 10 if not provided
-
-            // // Validate the `per_page` parameter to ensure it's a valid number
-            // $validatedPerPage = filter_var($perPage, FILTER_VALIDATE_INT, [
-            //     'options' => [
-            //         'default' => 10,    // Default value
-            //         'min_range' => 1,   // Minimum value
-            //         'max_range' => 100, // Maximum value
-            //     ],
-            // ]);
 
             $entries = Entryuser::paginate(10);
 
@@ -128,39 +118,6 @@ class EntryuserController extends Controller
             ]);
 
             $validatedData['status'] = 'waiting';
-
-            // $entries = Entryuser::create([
-            //     ...$request->validate([
-            //         'nama' => 'nullable|string|max:255',
-            //         'jenis_kelamin' => ['required', Rule::in(['L', 'P'])],
-            //         'tempat_lahir' => 'nullable|string|max:65535',
-            //         'tanggal_lahir' => 'nullable|date',
-            //         'alamat' => 'nullable|string|max:65535',
-            //         'email' => 'nullable|email|max:255',
-            //         'no_telp' => 'nullable|string|max:20',
-            //         'mbti' => 'nullable|string|max:4',
-            //         'data_keluarga' => 'nullable|string|max:65535',
-            //         'instagram' => 'nullable|string|max:255',
-            //         'instagram_follow' => 'nullable|integer|min:0',
-            //         'facebook' => 'nullable|string|max:255',
-            //         'facebook_follow' => 'nullable|integer|min:0',
-            //         'linkedin' => 'nullable|string|max:255',
-            //         'linkedin_follow' => 'nullable|integer|min:0',
-            //         'riwayat_parlemen' => 'nullable|string|max:65535',
-            //         'riwayat_kerja' => 'nullable|string|max:65535',
-            //         'jabatan_kelompok' => 'nullable|string|max:65535',
-            //         'jabatan_organisasi' => 'nullable|string|max:65535',
-            //         'riwayat_pendidikan' => 'nullable|string|max:65535',
-            //         'riwayat_penghargaan' => 'nullable|string|max:65535',
-            //         'isu_kemenkeu' => 'nullable|string|max:65535',
-            //         'rekomen_pendekatan' => 'nullable|string|max:65535',
-            //         'sikap_kemenkeu' => 'nullable|string|max:65535',
-            //         'tingkat_pengaruh' => 'nullable|string|max:65535',
-            //         'riwayat_hukum' => 'nullable|string|max:65535',
-            //         'user_id' => 'nullable|exists:users,id',
-            //     ]),
-            //     'status' => 'waiting'
-            // ]);
 
             $entries = Entryuser::create([
                 ...$validatedData,
@@ -271,7 +228,6 @@ class EntryuserController extends Controller
             return ApiResponse::error('Gagal mengubah status entry user', 500, ['exception' => $e->getMessage()]);
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

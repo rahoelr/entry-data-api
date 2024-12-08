@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomizationController;
+use App\Http\Controllers\EntryInstitutionController;
 use App\Http\Controllers\EntryuserController;
 use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function () {
         });
         Route::apiResource('/entry-user',EntryuserController::class);
         Route::get('/entry-user/user/{userId}', [EntryuserController::class, 'showByUserId']);
+        Route::apiResource('/entry-lembaga',EntryInstitutionController::class);
+        Route::get('/entry-lembaga/user/{userId}', [EntryInstitutionController::class, 'showByUserId']);
     });
 
     Route::middleware('role:user_kementerian')->group(function () {
