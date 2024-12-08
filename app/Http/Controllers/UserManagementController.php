@@ -7,6 +7,7 @@ use App\Http\Resources\UserManagementResource;
 use App\Classes\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UserManagementController extends Controller
