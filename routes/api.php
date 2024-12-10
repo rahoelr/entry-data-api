@@ -38,8 +38,10 @@ Route::middleware('auth:sanctum')->group(function () {
         });
         Route::apiResource('/entry-user',EntryuserController::class);
         Route::get('/entry-user/user/{userId}', [EntryuserController::class, 'showByUserId']);
+        Route::put('/entry-user/status/{id}', [EntryuserController::class, 'updateStatus']);
         Route::apiResource('/entry-lembaga',EntryInstitutionController::class);
         Route::get('/entry-lembaga/user/{userId}', [EntryInstitutionController::class, 'showByUserId']);
+        Route::put('/entry-lembaga/status/{id}', [EntryuserController::class, 'updateStatus']);
     });
 
     Route::middleware('role:user_kementerian')->group(function () {

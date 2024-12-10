@@ -140,11 +140,20 @@ class EntryuserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Entryuser $entryuser)
-    {
-        return new EntryUserResource($entryuser);
-    }
 
+    public function show($id)
+    {
+        try {
+            $entryuser = Entryuser::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Entry user retrieved successfully.',
+                'data' => new EntryUserResource($entryuser),
+            ]);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Entry user tidak ditemukan', 404);
+        }
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -156,16 +165,18 @@ class EntryuserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Entryuser $entryuser)
+    public function update(Request $request, $id)
     {
         try {
+            $entryuser = Entryuser::find($id);
+
             if (!$entryuser) {
                 return ApiResponse::error('Data entry user tidak ditemukan', 404);
             }
 
             $validatedData = $request->validate([
                 'nama' => 'nullable|string|max:255',
-                'jenis_kelamin' => ['required', Rule::in(['L', 'P'])],
+                'jenis_kelamin' => ['nullable', Rule::in(['L', 'P'])],
                 'tempat_lahir' => 'nullable|string|max:65535',
                 'tanggal_lahir' => 'nullable|date',
                 'alamat' => 'nullable|string|max:65535',
@@ -191,7 +202,6 @@ class EntryuserController extends Controller
                 'tingkat_pengaruh' => 'nullable|string|max:65535',
                 'riwayat_hukum' => 'nullable|string|max:65535',
                 'user_id' => 'nullable|exists:users,id',
-                'status' => 'nullable|in:active,waiting,inactive',
             ]);
 
             $entryuser->update(array_filter($validatedData));
@@ -205,15 +215,17 @@ class EntryuserController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, Entryuser $entryuser)
+    public function updateStatus(Request $request, $id)
     {
         try {
+            $entryuser = Entryuser::find($id);
+
             if (!$entryuser) {
                 return ApiResponse::error('Data entry user tidak ditemukan', 404);
             }
 
             $validatedData = $request->validate([
-                'status' => 'required|in:active,waiting,inactive',
+                'status' => 'required|in:accepted,waiting,rejected',
             ]);
 
             $entryuser->update([
@@ -232,9 +244,10 @@ class EntryuserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Entryuser $entryuser)
+    public function destroy($id)
     {
         try {
+            $entryuser = Entryuser::findOrFail($id);
             $entryuser->delete();
 
             return ApiResponse::success(null, 'Data entry user berhasil dihapus');

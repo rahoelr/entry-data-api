@@ -147,9 +147,18 @@ class EntryInstitutionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(EntryInstitution $entryInstitution)
+    public function show($id)
     {
-        return new EntryInstitutionResource($entryInstitution);
+        try {
+            $entryInstitution = EntryInstitution::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Entry user retrieved successfully.',
+                'data' => new EntryInstitutionResource($entryInstitution),
+            ]);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Entry user tidak ditemukan', 404);
+        }
     }
 
     /**
@@ -163,9 +172,11 @@ class EntryInstitutionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, EntryInstitution $entryInstitution)
+    public function update(Request $request, $id)
     {
         try {
+            $entryInstitution = EntryInstitution::find($id);
+
             if (!$entryInstitution) {
                 return ApiResponse::error('Data entry lembaga tidak ditemukan', 404);
             }
@@ -206,7 +217,6 @@ class EntryInstitutionController extends Controller
                 'analisis_pengaruh' => 'nullable|string|max:65535',
                 'kesimpulan' => 'nullable|string|max:65535',
                 'user_id' => 'nullable|exists:users,id',
-                'status' => 'nullable|in:active,waiting,inactive',
             ]);
 
             $entryInstitution->update(array_filter($validatedData));
@@ -220,15 +230,17 @@ class EntryInstitutionController extends Controller
         }
     }
 
-    public function updateStatus(Request $request, EntryInstitution $entryInstitution)
+    public function updateStatus(Request $request, $id)
     {
         try {
+            $entryInstitution = EntryInstitution::find($id);
+
             if (!$entryInstitution) {
                 return ApiResponse::error('Data entry lembaga tidak ditemukan', 404);
             }
 
             $validatedData = $request->validate([
-                'status' => 'required|in:active,waiting,inactive',
+                'status' => 'required|in:accepted,waiting,rejected',
             ]);
 
             $entryInstitution->update([
@@ -247,9 +259,10 @@ class EntryInstitutionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(EntryInstitution $entryInstitution)
+    public function destroy($id)
     {
         try {
+            $entryInstitution = EntryInstitution::find($id);
             $entryInstitution->delete();
 
             return ApiResponse::success(null, 'Data entry user berhasil dihapus');
