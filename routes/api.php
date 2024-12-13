@@ -24,12 +24,15 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware('role:manager,data_entry')->group(function () {
+        //entry-user
         Route::apiResource('/entry-user',EntryuserController::class);
         Route::get('/entry-user/user/{userId}', [EntryuserController::class, 'showByUserId']);
         Route::put('/entry-user/status/{id}', [EntryuserController::class, 'updateStatus']);
+
+        //lembaga
         Route::apiResource('/entry-lembaga',EntryInstitutionController::class);
         Route::get('/entry-lembaga/user/{userId}', [EntryInstitutionController::class, 'showByUserId']);
-        Route::put('/entry-lembaga/status/{id}', [EntryuserController::class, 'updateStatus']);
+        Route::put('/entry-lembaga/status/{id}', [EntryInstitutionController::class, 'updateStatus']);
     });
 
     Route::middleware('role:manager,data_entry,user_kementerian')->group(function () {
