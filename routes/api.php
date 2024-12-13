@@ -18,17 +18,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('/customization',CustomizationController::class);
         Route::get('customization/active-color', [CustomizationController::class, 'show']);
 
-        //sinkronisasi
-//        Route::post('/sync/save', [SyncController::class, 'saveEndpoint']);
-//        Route::post('/sync/now', [SyncController::class, 'syncNow']);
-//        Route::get('/sync/logs', [SyncController::class, 'getLogs']);
-
         //user management
         Route::apiResource('/users',UserManagementController::class);
 
     });
 
-    Route::middleware('role:data_entry')->group(function () {
+    Route::middleware('role:manager,data_entry')->group(function () {
         Route::apiResource('/entry-user',EntryuserController::class);
         Route::get('/entry-user/user/{userId}', [EntryuserController::class, 'showByUserId']);
         Route::put('/entry-user/status/{id}', [EntryuserController::class, 'updateStatus']);
@@ -37,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/entry-lembaga/status/{id}', [EntryuserController::class, 'updateStatus']);
     });
 
-    Route::middleware('role:user_kementerian')->group(function () {
+    Route::middleware('role:manager,data_entry,user_kementerian')->group(function () {
         Route::get('/user-kementerian/dashboard', function () {
             return response()->json(['message' => 'Welcome User Kementerian']);
         });
