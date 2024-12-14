@@ -16,6 +16,7 @@ class EntryInstitutionResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'nama' => $this->nama,
             'alamat' => $this->alamat,
             'email' => $this->email,
             'no_kontak' => $this->no_kontak,

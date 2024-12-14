@@ -18,6 +18,7 @@ class EntryInstitutionSeeder extends Seeder
 
         foreach (range(1, 10) as $index) {
             EntryInstitution::create([
+                'nama' => $faker->name,
                 'alamat' => $faker->address,
                 'email' => $faker->unique()->safeEmail,
                 'no_kontak' => $faker->numerify('08##########'),

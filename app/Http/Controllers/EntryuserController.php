@@ -147,7 +147,7 @@ class EntryuserController extends Controller
             $entryuser = Entryuser::findOrFail($id);
             return response()->json([
                 'success' => true,
-                'message' => 'Entry user retrieved successfully.',
+                'message' => 'Berhasil Mengambil data entry user.',
                 'data' => new EntryUserResource($entryuser),
             ]);
         } catch (\Exception $e) {

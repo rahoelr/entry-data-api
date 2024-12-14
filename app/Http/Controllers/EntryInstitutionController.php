@@ -87,6 +87,7 @@ class EntryInstitutionController extends Controller
     {
         try {
             $validatedData = $request->validate([
+                'nama' => 'nullable|string|max:255',
                 'alamat' => 'nullable|string|max:65535',
                 'email' => 'nullable|email|max:255',
                 'no_kontak' => 'nullable|string|max:20',
@@ -153,11 +154,11 @@ class EntryInstitutionController extends Controller
             $entryInstitution = EntryInstitution::findOrFail($id);
             return response()->json([
                 'success' => true,
-                'message' => 'Entry user retrieved successfully.',
+                'message' => 'Berhasil mengambil data entry lembaga.',
                 'data' => new EntryInstitutionResource($entryInstitution),
             ]);
         } catch (\Exception $e) {
-            return ApiResponse::error('Entry user tidak ditemukan', 404);
+            return ApiResponse::error('Entry lembaga tidak ditemukan', 404);
         }
     }
 
@@ -182,6 +183,7 @@ class EntryInstitutionController extends Controller
             }
 
             $validatedData = $request->validate([
+                'nama' => 'nullable|string|max:255',
                 'alamat' => 'nullable|string|max:65535',
                 'email' => 'nullable|email|max:255',
                 'no_kontak' => 'nullable|string|max:20',
@@ -265,9 +267,8 @@ class EntryInstitutionController extends Controller
             $entryInstitution = EntryInstitution::find($id);
             $entryInstitution->delete();
 
-            return ApiResponse::success(null, 'Data entry user berhasil dihapus');
+            return ApiResponse::success(null, 'Data entry lembaga berhasil dihapus');
         } catch (ModelNotFoundException $e) {
-            // Return a custom error message for a non-existent Entryuser
             return ApiResponse::error('Data entry lembaga tidak ditemukan', 404);
         } catch (\Exception $e) {
             return ApiResponse::error('Gagal menghapus data entry lembaga', 500, ['exception' => $e->getMessage()]);

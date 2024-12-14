@@ -25,6 +25,7 @@ class EntryInstitution extends Model
     }
 
     protected $fillable = [
+        'nama',
         'alamat',
         'email',
         'no_kontak',
