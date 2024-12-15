@@ -18,8 +18,6 @@ class EntryuserController extends Controller
     public function index()
     {
         try {
-            // // Get the desired number of items per page from the query parameter
-
             $entries = Entryuser::paginate(10);
 
             return ApiResponse::success(
@@ -154,13 +152,6 @@ class EntryuserController extends Controller
             return ApiResponse::error('Entry user tidak ditemukan', 404);
         }
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    // public function edit(Entryuser $entryuser)
-    // {
-    //     //
-    // }
 
     /**
      * Update the specified resource in storage.
@@ -252,10 +243,35 @@ class EntryuserController extends Controller
 
             return ApiResponse::success(null, 'Data entry user berhasil dihapus');
         } catch (ModelNotFoundException $e) {
-            // Return a custom error message for a non-existent Entryuser
             return ApiResponse::error('Data entry user tidak ditemukan', 404);
         } catch (\Exception $e) {
             return ApiResponse::error('Gagal menghapus data entry user', 500, ['exception' => $e->getMessage()]);
         }
     }
+
+    public function accepted()
+    {
+        try {
+            $entries = Entryuser::where('status', 'accepted')->paginate(10);
+            return ApiResponse::success(
+                [
+                    'data' => EntryUserResource::collection($entries->items()),
+                    'pagination' => [
+                        'current_page' => $entries->currentPage(),
+                        'last_page' => $entries->lastPage(),
+                        'per_page' => $entries->perPage(),
+                        'total' => $entries->total(),
+                    ],
+                ],
+                'Daftar entry user berhasil diambil'
+            );
+        } catch (\Exception $e) {
+            return ApiResponse::error(
+                'Gagal mengambil daftar entry user',
+                500,
+                ['exception' => $e->getMessage()]
+            );
+        }
+    }
+
 }

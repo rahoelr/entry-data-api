@@ -36,9 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware('role:manager,data_entry,user_kementerian')->group(function () {
-        Route::get('/user-kementerian/dashboard', function () {
-            return response()->json(['message' => 'Welcome User Kementerian']);
-        });
+        //user-kementerian
+        Route::apiResource('/user-kementerian',EntryuserController::class);
+        Route::get('/data-entry/accepted', [EntryuserController::class, 'accepted']);
     });
 });
 
