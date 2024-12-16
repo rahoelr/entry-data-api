@@ -249,10 +249,17 @@ class EntryuserController extends Controller
         }
     }
 
-    public function accepted()
+    public function accepted(Request $request)
     {
         try {
-            $entries = Entryuser::where('status', 'accepted')->paginate(10);
+            $nama = $request->query('nama');
+            $query = Entryuser::where('status', 'accepted');
+            if ($nama) {
+                $query->where('nama', 'like', '%' . $nama . '%');
+            }
+
+            $entries = $query->paginate(10);
+
             return ApiResponse::success(
                 [
                     'data' => EntryUserResource::collection($entries->items()),
