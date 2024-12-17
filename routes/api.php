@@ -38,8 +38,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:manager,data_entry,user_kementerian')->group(function () {
         //user-kementerian
         Route::apiResource('/user-kementerian',EntryuserController::class);
-        //accepted data entry
+
+        //status entries
         Route::get('/data-entry/accepted', [EntryuserController::class, 'accepted']);
+        Route::get('/data-entry/waiting', [EntryuserController::class, 'waiting']);
+        Route::get('/data-entry/rejected', [EntryuserController::class, 'rejected']);
     });
 });
 
