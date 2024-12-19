@@ -28,21 +28,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('/entry-user',EntryuserController::class);
         Route::get('/entry-user/user/{userId}', [EntryuserController::class, 'showByUserId']);
         Route::put('/entry-user/status/{id}', [EntryuserController::class, 'updateStatus']);
-
+        
         //lembaga
         Route::apiResource('/entry-lembaga',EntryInstitutionController::class);
         Route::get('/entry-lembaga/user/{userId}', [EntryInstitutionController::class, 'showByUserId']);
         Route::put('/entry-lembaga/status/{id}', [EntryInstitutionController::class, 'updateStatus']);
     });
-
-    Route::middleware('role:manager,data_entry,user_kementerian')->group(function () {
+    
+    Route::middleware('role:user_kementerian')->group(function () {
         //user-kementerian
-        Route::apiResource('/user-kementerian',EntryuserController::class);
+        // Route::apiResource('/user-kementerian',EntryuserController::class);
+        Route::get('/user-kementerian', [EntryuserController::class, 'index']);
+        Route::get('/user-kementerian/{id}', [EntryuserController::class, 'show']);
+        Route::get('/user-kementrian/user/{userId}', [EntryuserController::class, 'showByUserId']);
 
-        //status entries
-        Route::get('/data-entry/accepted', [EntryuserController::class, 'accepted']);
-        Route::get('/data-entry/waiting', [EntryuserController::class, 'waiting']);
-        Route::get('/data-entry/rejected', [EntryuserController::class, 'rejected']);
     });
 });
 

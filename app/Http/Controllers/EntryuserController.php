@@ -15,10 +15,23 @@ class EntryuserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $entries = Entryuser::paginate(10);
+            $nama = $request->query('nama');
+            $status = $request->query('status');
+
+            $query = Entryuser::query();
+
+            if (!empty($nama)) {
+                $query->where('nama', 'like', '%' . $nama . '%');
+            }
+
+            if (!empty($status)) {
+                $query->where('status', $status);
+            }
+
+            $entries = $query->paginate(10);
 
             return ApiResponse::success(
                 [
@@ -43,10 +56,22 @@ class EntryuserController extends Controller
         }
     }
 
-    public function showByUserId($userId)
+    public function showByUserId(Request $request, $userId)
     {
         try {
-            $entries = Entryuser::where('user_id', $userId)->paginate(10);
+            $nama = $request->query('nama');
+            $status = $request->query('status');
+
+            $query = Entryuser::where('user_id', $userId);
+
+            if (!empty($nama)) {
+                $query->where('nama', 'like', '%' . $nama . '%');
+            }
+            if (!empty($status)) {
+                $query->where('status', $status);
+            }
+
+            $entries = $query->paginate(10);
 
             return ApiResponse::success(
                 [
@@ -249,100 +274,100 @@ class EntryuserController extends Controller
         }
     }
 
-    public function accepted(Request $request)
-    {
-        try {
-            $nama = $request->query('nama');
-            $query = Entryuser::where('status', 'accepted');
-            if ($nama) {
-                $query->where('nama', 'like', '%' . $nama . '%');
-            }
+    // public function accepted(Request $request)
+    // {
+    //     try {
+    //         $nama = $request->query('nama');
+    //         $query = Entryuser::where('status', 'accepted');
+    //         if (!empty($nama)) {
+    //             $query->where('nama', 'like', '%' . $nama . '%');
+    //         }
 
-            $entries = $query->paginate(10);
+    //         $entries = $query->paginate(10);
 
-            return ApiResponse::success(
-                [
-                    'data' => EntryUserResource::collection($entries->items()),
-                    'pagination' => [
-                        'current_page' => $entries->currentPage(),
-                        'last_page' => $entries->lastPage(),
-                        'per_page' => $entries->perPage(),
-                        'total' => $entries->total(),
-                    ],
-                ],
-                'Daftar entry user berhasil diambil'
-            );
-        } catch (\Exception $e) {
-            return ApiResponse::error(
-                'Gagal mengambil daftar entry user',
-                500,
-                ['exception' => $e->getMessage()]
-            );
-        }
-    }
+    //         return ApiResponse::success(
+    //             [
+    //                 'data' => EntryUserResource::collection($entries->items()),
+    //                 'pagination' => [
+    //                     'current_page' => $entries->currentPage(),
+    //                     'last_page' => $entries->lastPage(),
+    //                     'per_page' => $entries->perPage(),
+    //                     'total' => $entries->total(),
+    //                 ],
+    //             ],
+    //             'Daftar entry user berhasil diambil'
+    //         );
+    //     } catch (\Exception $e) {
+    //         return ApiResponse::error(
+    //             'Gagal mengambil daftar entry user',
+    //             500,
+    //             ['exception' => $e->getMessage()]
+    //         );
+    //     }
+    // }
 
-    public function rejected(Request $request)
-    {
-        try {
-            $nama = $request->query('nama');
-            $query = Entryuser::where('status', 'rejected');
-            if ($nama) {
-                $query->where('nama', 'like', '%' . $nama . '%');
-            }
+    // public function rejected(Request $request)
+    // {
+    //     try {
+    //         $nama = $request->query('nama');
+    //         $query = Entryuser::where('status', 'rejected');
+    //         if (!empty($nama)) {
+    //             $query->where('nama', 'like', '%' . $nama . '%');
+    //         }
 
-            $entries = $query->paginate(10);
+    //         $entries = $query->paginate(10);
 
-            return ApiResponse::success(
-                [
-                    'data' => EntryUserResource::collection($entries->items()),
-                    'pagination' => [
-                        'current_page' => $entries->currentPage(),
-                        'last_page' => $entries->lastPage(),
-                        'per_page' => $entries->perPage(),
-                        'total' => $entries->total(),
-                    ],
-                ],
-                'Daftar entry user berhasil diambil'
-            );
-        } catch (\Exception $e) {
-            return ApiResponse::error(
-                'Gagal mengambil daftar entry user',
-                500,
-                ['exception' => $e->getMessage()]
-            );
-        }
-    }
+    //         return ApiResponse::success(
+    //             [
+    //                 'data' => EntryUserResource::collection($entries->items()),
+    //                 'pagination' => [
+    //                     'current_page' => $entries->currentPage(),
+    //                     'last_page' => $entries->lastPage(),
+    //                     'per_page' => $entries->perPage(),
+    //                     'total' => $entries->total(),
+    //                 ],
+    //             ],
+    //             'Daftar entry user berhasil diambil'
+    //         );
+    //     } catch (\Exception $e) {
+    //         return ApiResponse::error(
+    //             'Gagal mengambil daftar entry user',
+    //             500,
+    //             ['exception' => $e->getMessage()]
+    //         );
+    //     }
+    // }
 
-    public function waiting(Request $request)
-    {
-        try {
-            $nama = $request->query('nama');
-            $query = Entryuser::where('status', 'waiting');
-            if ($nama) {
-                $query->where('nama', 'like', '%' . $nama . '%');
-            }
+    // public function waiting(Request $request)
+    // {
+    //     try {
+    //         $nama = $request->query('nama');
+    //         $query = Entryuser::where('status', 'waiting');
+    //         if (!empty($nama)) {
+    //             $query->where('nama', 'like', '%' . $nama . '%');
+    //         }
 
-            $entries = $query->paginate(10);
+    //         $entries = $query->paginate(10);
 
-            return ApiResponse::success(
-                [
-                    'data' => EntryUserResource::collection($entries->items()),
-                    'pagination' => [
-                        'current_page' => $entries->currentPage(),
-                        'last_page' => $entries->lastPage(),
-                        'per_page' => $entries->perPage(),
-                        'total' => $entries->total(),
-                    ],
-                ],
-                'Daftar entry user berhasil diambil'
-            );
-        } catch (\Exception $e) {
-            return ApiResponse::error(
-                'Gagal mengambil daftar entry user',
-                500,
-                ['exception' => $e->getMessage()]
-            );
-        }
-    }
+    //         return ApiResponse::success(
+    //             [
+    //                 'data' => EntryUserResource::collection($entries->items()),
+    //                 'pagination' => [
+    //                     'current_page' => $entries->currentPage(),
+    //                     'last_page' => $entries->lastPage(),
+    //                     'per_page' => $entries->perPage(),
+    //                     'total' => $entries->total(),
+    //                 ],
+    //             ],
+    //             'Daftar entry user berhasil diambil'
+    //         );
+    //     } catch (\Exception $e) {
+    //         return ApiResponse::error(
+    //             'Gagal mengambil daftar entry user',
+    //             500,
+    //             ['exception' => $e->getMessage()]
+    //         );
+    //     }
+    // }
 
 }

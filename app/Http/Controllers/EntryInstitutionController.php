@@ -14,12 +14,23 @@ class EntryInstitutionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            // // Get the desired number of items per page from the query parameter
+            $nama = $request->query('nama');
+            $status = $request->query('status');
 
-            $entries = EntryInstitution::paginate(10);
+            $query = EntryInstitution::query();
+
+            if (!empty($nama)) {
+                $query->where('nama', 'like', '%' . $nama . '%');
+            }
+
+            if (!empty($status)) {
+                $query->where('status', $status);
+            }
+
+            $entries = $query->paginate(10);
 
             return ApiResponse::success(
                 [
@@ -44,10 +55,22 @@ class EntryInstitutionController extends Controller
         }
     }
 
-    public function showByUserId($userId)
+    public function showByUserId(Request $request, $userId)
     {
         try {
-            $entries = EntryInstitution::where('user_id', $userId)->paginate(10);
+            $nama = $request->query('nama');
+            $status = $request->query('status');
+
+            $query = EntryInstitution::where('user_id', $userId);
+
+            if (!empty($nama)) {
+                $query->where('nama', 'like', '%' . $nama . '%');
+            }
+            if (!empty($status)) {
+                $query->where('status', $status);
+            }
+
+            $entries = $query->paginate(10);
 
             return ApiResponse::success(
                 [
@@ -274,4 +297,100 @@ class EntryInstitutionController extends Controller
             return ApiResponse::error('Gagal menghapus data entry lembaga', 500, ['exception' => $e->getMessage()]);
         }
     }
+
+    // public function accepted(Request $request)
+    // {
+    //     try {
+    //         $nama = $request->query('nama');
+    //         $query = EntryInstitution::where('status', 'accepted');
+    //         if (!empty($nama)) {
+    //             $query->where('nama', 'like', '%' . $nama . '%');
+    //         }
+
+    //         $entries = $query->paginate(10);
+
+    //         return ApiResponse::success(
+    //             [
+    //                 'data' => EntryInstitutionResource::collection($entries->items()),
+    //                 'pagination' => [
+    //                     'current_page' => $entries->currentPage(),
+    //                     'last_page' => $entries->lastPage(),
+    //                     'per_page' => $entries->perPage(),
+    //                     'total' => $entries->total(),
+    //                 ],
+    //             ],
+    //             'Daftar entry lembaga berhasil diambil'
+    //         );
+    //     } catch (\Exception $e) {
+    //         return ApiResponse::error(
+    //             'Gagal mengambil daftar entry lembaga',
+    //             500,
+    //             ['exception' => $e->getMessage()]
+    //         );
+    //     }
+    // }
+
+    // public function rejected(Request $request)
+    // {
+    //     try {
+    //         $nama = $request->query('nama');
+    //         $query = EntryInstitution::where('status', 'rejected');
+    //         if (!empty($nama)) {
+    //             $query->where('nama', 'like', '%' . $nama . '%');
+    //         }
+
+    //         $entries = $query->paginate(10);
+
+    //         return ApiResponse::success(
+    //             [
+    //                 'data' => EntryInstitutionResource::collection($entries->items()),
+    //                 'pagination' => [
+    //                     'current_page' => $entries->currentPage(),
+    //                     'last_page' => $entries->lastPage(),
+    //                     'per_page' => $entries->perPage(),
+    //                     'total' => $entries->total(),
+    //                 ],
+    //             ],
+    //             'Daftar entry lembaga berhasil diambil'
+    //         );
+    //     } catch (\Exception $e) {
+    //         return ApiResponse::error(
+    //             'Gagal mengambil daftar entry lembaga',
+    //             500,
+    //             ['exception' => $e->getMessage()]
+    //         );
+    //     }
+    // }
+
+    // public function waiting(Request $request)
+    // {
+    //     try {
+    //         $nama = $request->query('nama');
+    //         $query = EntryInstitution::where('status', 'waiting');
+    //         if (!empty($nama)) {
+    //             $query->where('nama', 'like', '%' . $nama . '%');
+    //         }
+
+    //         $entries = $query->paginate(10);
+
+    //         return ApiResponse::success(
+    //             [
+    //                 'data' => EntryInstitutionResource::collection($entries->items()),
+    //                 'pagination' => [
+    //                     'current_page' => $entries->currentPage(),
+    //                     'last_page' => $entries->lastPage(),
+    //                     'per_page' => $entries->perPage(),
+    //                     'total' => $entries->total(),
+    //                 ],
+    //             ],
+    //             'Daftar entry lembaga berhasil diambil'
+    //         );
+    //     } catch (\Exception $e) {
+    //         return ApiResponse::error(
+    //             'Gagal mengambil daftar entry lembaga',
+    //             500,
+    //             ['exception' => $e->getMessage()]
+    //         );
+    //     }
+    // }
 }
