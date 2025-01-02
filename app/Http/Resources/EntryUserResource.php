@@ -17,6 +17,7 @@ class EntryUserResource extends JsonResource
         return [
             'id' => $this->id,
             'nama' => $this->nama,
+            'foto_profile' => $this->foto_profile,
             'jenis_kelamin' => $this->jenis_kelamin,
             'tempat_lahir' => $this->tempat_lahir,
             'tanggal_lahir' => $this->tanggal_lahir,

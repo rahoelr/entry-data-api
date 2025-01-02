@@ -138,7 +138,14 @@ class EntryuserController extends Controller
                 'tingkat_pengaruh' => 'nullable|string|max:65535',
                 'riwayat_hukum' => 'nullable|string|max:65535',
                 'user_id' => 'nullable|exists:users,id',
+                'foto_profile' => 'nullable|mimes:jpeg,bmp,png,jpg|max:2048',
             ]);
+
+            if ($request->hasFile('foto_profile')) {
+                $fotoPath = $request->file('foto_profile')->getRealPath();
+                $fotoContent = file_get_contents($fotoPath);
+                $validatedData['foto_profile'] = base64_encode($fotoContent);
+            }
 
             $validatedData['status'] = 'waiting';
 

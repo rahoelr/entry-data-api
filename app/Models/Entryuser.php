@@ -52,6 +52,7 @@ class Entryuser extends Model
         'tingkat_pengaruh',
         'riwayat_hukum',
         'status',
+        'foto_profile',
         'user_id'
     ];
 
