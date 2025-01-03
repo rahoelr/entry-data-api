@@ -13,6 +13,7 @@ class UserManagementResource extends JsonResource
             'id' => $this->id,
             'username' => $this->username,
             'role' => $this->role,
+            'email' => $this->email,
             'status' => $this->status,
         ];
     }
