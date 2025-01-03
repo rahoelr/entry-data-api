@@ -8,6 +8,7 @@ use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::put('/complete-register/{id}', [AuthController::class, 'completeRegister']);
 Route::get('/customization/current', [CustomizationController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -20,7 +21,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
         //user management
         Route::apiResource('/users',UserManagementController::class);
-
+        Route::post('/register-user-email', [AuthController::class, 'registerUserEmail']);
     });
 
     Route::middleware('role:manager,data_entry')->group(function () {
