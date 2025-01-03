@@ -118,7 +118,7 @@ class EntryuserController extends Controller
                 'alamat' => 'nullable|string|max:65535',
                 'email' => 'nullable|email|max:255',
                 'no_telp' => 'nullable|string|max:20',
-                'mbti' => 'nullable|string|max:6',
+                'mbti' => 'nullable|string',
                 'data_keluarga' => 'nullable|string|max:65535',
                 'instagram' => 'nullable|string|max:255',
                 'instagram_follow' => 'nullable|integer|min:0',
