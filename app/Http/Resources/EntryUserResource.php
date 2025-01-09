@@ -17,7 +17,7 @@ class EntryUserResource extends JsonResource
         return [
             'id' => $this->id,
             'nama' => $this->nama,
-            'foto_profile' => $this->foto_profile,
+            'foto_profile' => $this->foto_profile ? 'data:image/png;base64,' . $this->foto_profile : null,
             'jenis_kelamin' => $this->jenis_kelamin,
             'tempat_lahir' => $this->tempat_lahir,
             'tanggal_lahir' => $this->tanggal_lahir,
@@ -54,4 +54,6 @@ class EntryUserResource extends JsonResource
             'user_id' => $this->user_id,
         ];
     }
+
+
 }
