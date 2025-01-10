@@ -32,7 +32,7 @@
         .register-button {
             display: inline-block;
             background-color: #605BFF;
-            color: #FFFFFF;
+            color: #FFFFFF !important;
             padding: 15px 40px;
             text-decoration: none;
             border-radius: 16px;

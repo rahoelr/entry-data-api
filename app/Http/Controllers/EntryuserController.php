@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\EntryUserResourceNew;
 use App\Models\Entryuser;
 use App\Classes\ApiResponse;
 use App\Http\Resources\EntryUserResource;
@@ -184,7 +185,7 @@ class EntryuserController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Berhasil Mengambil data entry user.',
-                'data' => new EntryUserResource($entryuser),
+                'data' => new EntryUserResourceNew($entryuser),
             ]);
         } catch (\Exception $e) {
             return ApiResponse::error('Entry user tidak ditemukan', 404);
