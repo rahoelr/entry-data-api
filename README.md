@@ -3,13 +3,13 @@
 
 ## Deskripsi Proyek
 
-Proyek API ini dibangun menggunakan **Laravel 11** untuk mengelola data persetujuan dan pengeluaran dalam sistem. API ini menyediakan endpoint untuk membuat dan memperbarui tahap persetujuan (`approval stages`), membuat pengeluaran (`expenses`), serta melakukan persetujuan pengeluaran oleh `approvers`. Semua endpoint API didokumentasikan menggunakan Swagger.
+Proyek API ini dibangun menggunakan **Laravel 11** untuk mendukung pengumpulan, pengelolaan, dan integrasi data profil pengguna. API ini dikembangkan sebagai bagian dari sistem berbasis web untuk memfasilitasi berbagai peran pengguna, seperti Entri Data, Manajer/Admin, dan Pengguna Kementerian, dalam mengelola data.
 
 ## Langkah-Langkah Instalasi dan Penggunaan
 
 Ikuti langkah-langkah berikut untuk menginstal dan menjalankan API di lingkungan lokal Anda.
 
-### 1. Clone Repository
+### 1. Clone Repository atau Extract Source File
 
 Clone repository proyek ini dengan perintah berikut:
 
@@ -44,8 +44,11 @@ composer install
   DB_USERNAME=username_db
   DB_PASSWORD=pass_db
   ```
+    - Pastikan Anda telah membuat database dengan nama yang disebutkan pada `DB_DATABASE`.
+  
 
-- Setting EMAIL SMTP :
+- Pengaturan Email SMTP untuk Konfirmasi Email
+  API ini memerlukan pengaturan SMTP untuk mengirimkan email konfirmasi. Berikut adalah contoh pengaturan SMTP untuk Gmail:
   ```env
     MAIL_MAILER=smtp
     MAIL_HOST=smtp.gmail.com
@@ -56,8 +59,16 @@ composer install
     MAIL_FROM_ADDRESS=aknatha02@gmail.com
     MAIL_FROM_NAME="Data Entry"
   ```
+- Catatan Penting:
+    - Aktifkan "Akses Aplikasi yang Kurang Aman" (untuk Gmail):
+      - Gunakan App Passwords untuk keamanan tambahan. Langkah-langkah membuat App Password:
+      - Masuk ke akun Google Anda.
+      - Akses Google Account Settings.
+      - Di bagian "Sign-in & Security", pilih App Passwords.
+      - Ikuti petunjuk untuk menghasilkan kata sandi aplikasi khusus.
+    - Gunakan Kata Sandi Aplikasi sebagai nilai untuk MAIL_PASSWORD.
+    - Setelah konfigurasi selesai, lakukan pengujian untuk memastikan pengaturan SMTP sudah benar.
 
-- Pastikan Anda telah membuat database dengan nama yang disebutkan pada `DB_DATABASE`.
 - Pastikan Anda telah melakukan setup `email smtp` yang akan digunakan sebagai pengirim mail.
 
 ### 4. Generate Key Aplikasi
@@ -77,13 +88,48 @@ Setelah mengonfigurasi file `.env`, jalankan migrasi untuk membuat struktur tabe
 php artisan migrate
 ```
 
-### 6. Jalankan Seeder untuk Status
+### 6. Jalankan Seeder untuk Membuat User Pertama
 
-Proyek ini memerlukan beberapa data awal untuk tabel `users`. Jalankan perintah berikut untuk mengisinya:
+Proyek ini memerlukan beberapa data awal untuk tabel `users`. Sebelum menjalankan seeder, Anda dapat memodifikasi data akun admin di file `DatabaseSeeder` sesuai dengan kebutuhan Anda.
 
-```bash
-php artisan db:seed
-```
+#### Langkah-langkah:
+
+1. **Temukan file seeder**
+   File seeder terletak di direktori `database/seeders/DatabaseSeeder.php`.
+
+2. **Edit data akun admin (opsional)**
+   Anda dapat mengubah data default berikut:
+
+   ```php
+   User::create([
+       'name' => 'admin',
+       'username' => 'admin',
+       'email' => 'admin@email.com',
+       'password' => Hash::make('admin2025'),
+       'role' => 'manager',
+       'status' => 'active',
+   ]);
+   ```
+
+   Misalnya, untuk mengganti nama atau email admin:
+
+   ```php
+   User::create([
+       'name' => 'superadmin',
+       'username' => 'superadmin',
+       'email' => 'superadmin@email.com',
+       'password' => Hash::make('supersecure2025'),
+       'role' => 'admin',
+       'status' => 'active',
+   ]);
+   ```
+
+3. **Jalankan Seeder**
+   Setelah memastikan data sudah sesuai, jalankan perintah berikut untuk mengisi data awal ke database:
+
+   ```bash
+   php artisan db:seed
+   ```
 
 ### 7. Jalankan Server Laravel
 
@@ -99,116 +145,29 @@ Server akan berjalan di `http://localhost:8000`. Anda juga bisa mengubah port de
 php artisan serve --port=8080
 ```
 
-### 8. Generasi Dokumentasi Swagger
+### 8. Dokumentasi API Postman
 
-Setelah server berjalan, jalankan perintah berikut untuk menghasilkan dokumentasi Swagger:
+Dokumentasi API untuk proyek ini telah dibuat dan dipublikasikan di Postman. Pengguna dapat mengakses dokumentasi melalui tautan berikut:
 
-```bash
-php artisan l5-swagger:generate
+```
+https://documenter.getpostman.com/view/26411509/2sAYQfCU48
 ```
 
-Perintah ini akan memindai rute API Anda dan menghasilkan dokumentasi berdasarkan anotasi yang ada di dalam controller dan model.
+#### Cara Menggunakan Dokumentasi API:
+1. **Akses Langsung:**
+   Klik tautan di atas untuk membuka dokumentasi API yang telah dipublikasikan.
 
-### 9. Akses Dokumentasi Swagger
+2. **Import Collection:**
+   Selain mengakses langsung, Anda juga dapat mengimpor koleksi Postman yang telah diekspor. File koleksi dapat ditemukan di direktori proyek atau telah disediakan.
 
-Setelah berhasil menggenerate dokumentasi, Anda dapat mengakses Swagger UI di browser menggunakan URL berikut:
+   **Langkah-langkah Import Collection:**
+    - Buka aplikasi Postman.
+    - Pilih opsi **Import**.
+    - Unggah file koleksi `.json` yang telah diekspor.
+    - Setelah diimpor, Anda dapat langsung mencoba endpoint API yang tersedia.
 
-```plaintext
-http://127.0.0.1:8000/api/documentation
-```
+#### Catatan Penting
+- Pastikan Anda telah mengonfigurasi environment Postman jika diperlukan, seperti URL dasar API atau token autentikasi.
+- Gunakan dokumentasi ini untuk memahami setiap endpoint, termasuk parameter yang dibutuhkan, respons yang diharapkan, dan contoh penggunaan.
 
-Swagger UI akan menampilkan daftar endpoint API yang tersedia dan memungkinkan Anda untuk menguji endpoint tersebut langsung dari antarmuka.
 
-### 10. Urutan Menjalankan Endpoint API
-
-Ikuti urutan berikut untuk menjalankan endpoint API secara berurutan:
-
-1. **Buat Approvers**
-    - Pertama, buatlah `approvers` (misalnya 4 approvers). Anda dapat menggunakan endpoint `POST /api/approvers` untuk menambah approvers baru.
-    - Endpoint yang digunakan: `POST api/approvers`
-    - Response:
-      ```json
-      {
-        "success": true,
-        "data": {
-          "id": 4,
-          "name": "RARA"
-        },
-        "message": "Approver created successfully."
-      }
-      ```
-
-2. **Buat Approval Stage Berdasarkan Approvers**
-    - Setelah approvers dibuat, buatlah `approval stage` yang mencakup approvers yang sudah Anda buat. Gunakan endpoint `POST /api/approval-stages` untuk membuat approval stage baru.
-    - Endpoint yang digunakan: `POST api/approval-stages`
-    - Response:
-      ```json
-      {
-        "success": true,
-        "data": {
-          "id": 3,
-          "approver": {
-            "id": 5,
-            "name": "bagus"
-          }
-        },
-        "message": "Approval stage created successfully."
-      }
-      ```
-
-3. **Update Approval Stage**
-    - Setelah approval stage dibuat, Anda dapat mengupdate `approval stage` menggunakan endpoint `PUT /api/approval-stages/{id}`.
-    - Endpoint yang digunakan: `PUT api/approval-stages/{id}`
-    - Response:
-      ```json
-      {
-        "success": true,
-        "data": {
-          "id": 3,
-          "approver": {
-            "id": 5,
-            "name": "bagus"
-          }
-        },
-        "message": "Approval stage updated successfully."
-      }
-      ```
-
-4. **Buat Expense Baru**
-    - Setelah membuat approval stage, Anda dapat membuat pengeluaran baru yang akan terkait dengan approval stage yang sudah dibuat sebelumnya. Gunakan endpoint `POST /api/expenses` untuk membuat pengeluaran baru.
-    - Endpoint yang digunakan: `POST api/expenses`
-    - Response:
-      ```json
-        
-      ```
-
-5. **Approve Expense**
-    - Setelah membuat pengeluaran, approvers yang terkait dapat melakukan persetujuan pada pengeluaran berdasarkan approval stage yang telah dibuat. Gunakan endpoint `PATCH /api/expenses/{id}/approve` untuk melakukan persetujuan pada pengeluaran.
-    - Endpoint yang digunakan: `PATCH api/expenses/{id}/approve`
-    - Response:
-      ```json
-      {
-        "success": true,
-        "data": {
-          "id": 4,
-          "amount": 121212,
-          "status_id": 2,
-          "created_at": "2024-11-29T08:01:30.000000Z",
-          "updated_at": "2024-11-29T08:02:08.000000Z"
-        },
-        "message": "Expense approved successfully."
-      }
-      ```
-
-### Troubleshooting
-
-Jika Anda menemui masalah, berikut beberapa solusi yang bisa dicoba:
-
-- **Masalah dengan Composer Install**: Pastikan PHP dan Composer telah terinstal dengan benar. Jika ada masalah terkait dependensi, coba jalankan `composer update`.
-- **Masalah Koneksi Database**: Pastikan database Anda berjalan dengan baik dan kredensial di `.env` sudah benar.
-- **Dokumentasi Swagger Tidak Terupdate**: Jika ada perubahan pada controller atau rute yang tidak terupdate di Swagger, jalankan perintah berikut untuk menghapus cache dan regenerate dokumentasi:
-
-  ```bash
-  php artisan cache:clear
-  php artisan l5-swagger:generate
-  ```
